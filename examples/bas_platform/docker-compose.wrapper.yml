@@ -1,0 +1,19 @@
+version: "3.9"
+
+services:
+  bas-wrapper:
+    image: python:3.11-slim
+    container_name: bas-wrapper
+    working_dir: /app
+    volumes:
+      - ./backend:/app/backend
+    command: sh -c "pip install -r /app/backend/../requirements.txt && uvicorn backend.main:app --host 0.0.0.0 --port 9000"
+    environment:
+      CALDERA_URL: "http://host.docker.internal:8888"
+      CALDERA_API_KEY: "change-me"
+      WAZUH_URL: "http://host.docker.internal:55000"
+      WAZUH_USERNAME: "wazuh-wui"
+      WAZUH_PASSWORD: "change-me"
+      ENABLE_SCHEDULER: "true"
+    ports:
+      - "9000:9000"
